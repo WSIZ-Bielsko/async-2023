@@ -15,8 +15,13 @@ async def work(work_id: int):
 
 
 async def main1():
-    await work(1)
-    await work(2)
+    logger.info(f'Starting main1, {thread_name()} / {task_name()}')
+    t1 = asyncio.create_task(work(1))
+    t2 = asyncio.create_task(work(2))
+
+    await t1
+    await t2
+
 
 
 

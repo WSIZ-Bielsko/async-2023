@@ -7,7 +7,7 @@ def ts():
     return datetime.now().timestamp()
 
 
-def tn():
+def thread_name():
     return threading.current_thread().name
 
 
