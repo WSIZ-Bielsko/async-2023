@@ -39,10 +39,9 @@ async def main1():
     await t3
 
 
-
-
 if __name__ == '__main__':
-    logger.info("starting program, " + thread_name())
-    asyncio.run(main1())  # tu program czeka na zakonczenie wykonania funkcji o nazwie `main1`; uruchamia mechanizm asynchroniczny
+    logger.info('starting program, ' + thread_name())
+    asyncio.run(main1())
+    # tu program czeka na zakonczenie wykonania funkcji o nazwie `main1`; uruchamia mechanizm asynchroniczny
 
     logger.info("finishing program, " + thread_name())
