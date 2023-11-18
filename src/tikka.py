@@ -63,6 +63,7 @@ async def mix_tikka(arg: list[str]) -> str:
         assert ingr in arg
     res = 'tikka masala'
     await sleep(0.1 * len(res))
+    logger.info('mixing complete')
     return res
 
 
@@ -75,24 +76,36 @@ async def serve_tikka_masala(arg: list[str]) -> str:
     return res
 
 
-async def full_prepare_tea(arg: str):
+async def full_prepare_tea(arg: str) -> str:
+    logger.info('starting full tea preparation')
     water = await boil_water(arg)
     tea = await prepare_tea(water)
+    logger.info('tea preparation complete')
     return tea
 
 
+async def full_meat_preparation(arg: str) -> str:
+    logger.info('starting full meat preparation')
+    assert arg == 'meat'
+    pieces = await cut_meat(arg)
+    fried_meat = await fry_meat(pieces)
+    logger.info('meat preparation complete')
+    return fried_meat
+
+
 async def preparation():
-    tea = asyncio.create_task(full_prepare_tea('water'))
-    boiled_rice = asyncio.create_task(boil_rice('rice'))
-    meat_pieces = asyncio.create_task(cut_meat('meat'))
-    coriander = asyncio.create_task(cut_coriander('coriander'))
-    sauce = asyncio.create_task(prepare_sauce('cold sauce'))
+    # composite tasks
+    tea = create_task(full_prepare_tea('water'))
+    fried_meat = create_task(full_meat_preparation('meat'))
 
-    boiled_rice, meat_pieces, coriander, sauce = await asyncio.gather(boiled_rice, meat_pieces, coriander, sauce)
+    # some additional tasks
+    boiled_rice = create_task(boil_rice('rice'))
+    coriander = create_task(cut_coriander('coriander'))
+    sauce = create_task(prepare_sauce('cold sauce'))
 
-    fried_meat = asyncio.create_task(fry_meat(meat_pieces))
-
+    boiled_rice, coriander, sauce = await asyncio.gather(boiled_rice, coriander, sauce)
     tea, fried_meat = await asyncio.gather(tea, fried_meat)
+
     tikka = await mix_tikka([boiled_rice, fried_meat, coriander, sauce])
 
     serving = await serve_tikka_masala([tea, tikka])
