@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from uuid import UUID
 
 
 @dataclass
@@ -8,6 +9,11 @@ class Street:
     snow_cover_cm: float
 
 
+@dataclass
+class SnowSweeper:
+    id: UUID
+    name: str
+    location: str | None
 
 
 if __name__ == '__main__':
@@ -27,5 +33,5 @@ if __name__ == '__main__':
     for k in d.keys():
         print('k---->', d[k])
 
-    for (k,v) in d.items():
+    for (k, v) in d.items():
         print(k, ' *** ', v)
