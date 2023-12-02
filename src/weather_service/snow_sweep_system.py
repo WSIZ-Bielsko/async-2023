@@ -1,7 +1,7 @@
 from asyncio import run, sleep
 from loguru import logger
 
-from src.weather_service.streets import Street, SnowSweeper
+from streets import Street, SnowSweeper
 
 
 class WeatherService:
