@@ -22,8 +22,10 @@ kombinacje:
 
 
 def find_best_combination(data: list[int]) -> int:
-    # your code here
-    pass
+    max_sum = 0
+    for num in data:
+        max_sum += abs(num)
+    return max_sum
 
 
 class TestEngine2(unittest.TestCase):

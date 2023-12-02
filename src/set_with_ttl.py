@@ -27,7 +27,7 @@ class SetTTL:
     async def initialize(self):
         # tu uruchomić task, który będzie przeglądał co 0.1 sek self.value_age, i jeśli przekroczy ona self.ttl, to
         # uruchomi self.remove
-        logger.info('setttl - initializing')
+        logger.info('SetTTL - initializing')
         create_task(self.__terminator())
 
     async def __terminator(self):
@@ -68,15 +68,6 @@ async def main():
     s = SetTTL()
     await s.initialize()
 
-    s.add(10)
-    s.add(11)
-    await sleep(0.5)
-    s.add(10)
-    print(s)
-    print(10 in s)
-    s.remove(11)
-    print(s)
-    await sleep(10)
 
 
 if __name__ == '__main__':

@@ -12,8 +12,15 @@ Shrug może być ewentualnie podzielony na dwie części, czyli np. "¯\_(ツ...
 
 
 def has_hiddden_shrug(line: str) -> bool:
-    # your code here
-    pass
+    shrug = '¯\_(ツ)_/¯'
+    chars_to_remove = len(line) - len(shrug)
+    if chars_to_remove == 0:
+        return line == shrug
+    for st in range(1,len(line)-chars_to_remove):
+        cropped = line[:st] + line[st+chars_to_remove:]
+        if cropped == shrug:
+            return True
+    return False
 
 
 class TestEngine3(unittest.TestCase):
