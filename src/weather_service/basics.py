@@ -16,7 +16,7 @@ class SnowSweeper:
     location: str | None
 
 
-if __name__ == '__main__':
+def basic_tests():
     s = Street('Cieszyńska', 2.41, snow_cover_cm=0.4)
     c = Street('Krakowska', 3.12, snow_cover_cm=0.2)
 
@@ -35,3 +35,7 @@ if __name__ == '__main__':
 
     for (k, v) in d.items():
         print(k, ' *** ', v)
+
+
+if __name__ == '__main__':
+    basic_tests()

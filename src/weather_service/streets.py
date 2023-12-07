@@ -11,14 +11,9 @@ class Street:
 
 @dataclass
 class SnowSweeper:
-    id: uuid.uuid4()
     name: str
     location: str | None
-
-
-SS = SnowSweeper(uuid.uuid4(), 'adam', 'Bielsko')
-
-print(SS.id)
+    id: uuid.UUID = uuid.uuid4()
 
 
 def create_city() -> dict[str, Street]:
@@ -30,17 +25,17 @@ def create_city() -> dict[str, Street]:
 
     ss = [s1, s2, s3, s4, s5]
 
-    city = dict()
+    _city = dict()
     for steet in ss:
-        city[steet.name] = steet
-    return city
+        _city[steet.name] = steet
+    return _city
 
 
 if __name__ == '__main__':
     city = create_city()
-    print(city)
+    # print(city)
 
     # print(city['cieszynska'].name)
 
-    ssweeper1 = SnowSweeper(uuid.uuid4(), 'Bulldog1', None)
+    ssweeper1 = SnowSweeper('Bulldog1', None)
     print(ssweeper1)
