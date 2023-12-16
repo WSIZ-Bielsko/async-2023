@@ -3,6 +3,7 @@ import time
 from asyncio import run, sleep, create_task, gather
 from datetime import datetime
 
+from aiofile import async_open
 from loguru import logger
 
 
@@ -23,13 +24,28 @@ async def save_data(data: bytes):
             await sleep(0.001)
     logger.info(f'data {mb} save complete')
 
+async def save_data_aiofile(data: bytes):
+    mb = len(data) // 1024 ** 2
+    chunk_size = 50 * 1024 ** 2
+    n_chunks = len(data) // chunk_size
+
+    logger.info(f'data {mb} save start')
+
+    async with async_open('data.bin', 'wb') as f:
+        for i in range(n_chunks):
+            logger.info(f'saving chunk {i}')
+            await f.write(data[i * chunk_size: (i + 1) * chunk_size])
+
+    logger.info(f'data {mb} save complete')
+
 
 async def big_job(data: bytes):
     logger.info('big_job starting')
     # await sleep(0)
     # await sleep(0.5)
     # time.sleep(0.5)  # blocking!!
-    await save_data(data)
+    # await save_data(data)
+    await save_data_aiofile(data)
     logger.info('big_job complete')
 
 
