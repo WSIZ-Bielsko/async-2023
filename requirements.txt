@@ -1,3 +1,5 @@
-loguru ~= 0.7.2
-aiohttp ~= 3.9.0
-aiofile ~= 3.8.8
+loguru~=0.7.2
+aiohttp~=3.9.0
+asyncpg~=0.29.0
+aiofile~=3.8.8
+Faker~=22.2.0

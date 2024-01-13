@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16.1-alpine3.19
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+     - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.50"
+          memory: 400M
+        reservations:
+          cpus: "0.50"
+          memory: 200M
+
+  pgweb:
+    image: sosedoff/pgweb
+    restart: unless-stopped
+    ports:
+     - "8081:8081"
+    environment:
+     - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable

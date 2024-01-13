@@ -20,9 +20,10 @@ async def save_data(data: bytes):
     with open('data.bin', 'wb') as f:
         for i in range(n_chunks):
             logger.info(f'saving chunk no {i}')
-            f.write(data[i * chunk_size : (i+1) * chunk_size])
+            f.write(data[i * chunk_size: (i + 1) * chunk_size])
             await sleep(0.001)
     logger.info(f'data {mb} save complete')
+
 
 async def save_data_aiofile(data: bytes):
     mb = len(data) // 1024 ** 2
