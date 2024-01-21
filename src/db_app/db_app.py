@@ -112,11 +112,12 @@ async def main():
 
     en = datetime.now().timestamp()
     logger.warning(
-        f'Created {N_USERS} users in {en - st}s')  # N_USERS userow w 13s (dla ping latency = 6ms); po optymalizacji 0.18s
-    # dla 100k, przy create_many_users (ale po 1 w liscie); 4core cpu na db (uzywane 1.5 core) --> 29s; czyli 0.29 per 1k userow
-    # dla 100k, przy create_many_users; 4core cpu na db --> 1.440318; czyli 0.014 na 1k userów
+        f'Created {N_USERS} users in {en - st}s')  # 1k userow w 13s (dla ping ~ 6ms); po optymalizacji 0.18s
+    # dla 100k, przy create_many_users (ale po 1 w liscie); 4core cpu na db (uzywane 1.5 core) --> 29s; => 0.29 per 1k
+    # dla 100k, przy create_many_users; 4core cpu na db --> 1.44s; czyli 0.014 na 1k users
     # prawdopodobnie limitowane przez predkosc sieci
     # todo: test on db-local host (i.e. host and db are on same VM, or _very_ close)
+    # dla 100k, create_many_users, 4core, run at 10.10.1.200 (same host as db) --> 1.04s (0.01 / 1k users)
 
     print(f'size of users data: {len(str(users))}')
     import sys
