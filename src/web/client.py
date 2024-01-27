@@ -17,7 +17,7 @@ async def add_numbers():
         async with session.get(URL + f'/add?a={a}&b={b}') as res:
             # odpowiednik http://localhost:5000/add?a=3.30&b=7.30
             if res.status == 200:
-                f_res = FloatResult(**(await res.json()))
+                f_res = FloatResult(**(await res.json()))   # res.json() daje nam `dict`
                 logger.info(f_res)
             else:
                 logger.warning('Error: ' + str(res.text()))
@@ -26,7 +26,7 @@ async def add_numbers():
 async def upload_user():
     u = User('xx1', 'Romek')
     async with aiohttp.ClientSession() as session:
-        async with session.post(URL + '/upload_user', json=u.__dict__) as res:
+        async with session.post(URL + '/users', json=u.__dict__) as res:
             logger.info('user=' + str(await res.json()))
 
 
@@ -62,8 +62,8 @@ async def performance_test(n_workers: int = 1):
 
 
 async def main():
-    # await upload_user()
-    await add_numbers()
+    await upload_user()
+    # await add_numbers()
     # await performance_test(n_workers=1000)
 
 

@@ -22,16 +22,20 @@ async def hello(request):
 @routes.get('/add')
 async def request_with_query_params(request):
     logger.info(f'/add hit')
-    summand_a = float(request.rel_url.query.get('a', '2'))
-    summand_b = float(request.rel_url.query.get('b', '2'))
+    try:
+        summand_a = float(request.rel_url.query.get('a', '2'))
+        summand_b = float(request.rel_url.query.get('b', '2'))
+    except ValueError:
+        return web.json_response({'result': 'Error: parameters "a" and "b" should be numbers', 'host': node()},
+                                 status=400)
     result = summand_a + summand_b
-    return web.json_response({'result': result, 'host': node()})
+    return web.json_response({'result': result, 'host': node()}, status=200)
 
 
-@routes.post('/upload_user')
+@routes.post('/users')
 async def upload_user(request):
-    logger.info(f'/upload_user hit')
-    data = await request.json()
+    logger.info(f'POST /users hit')
+    data = await request.json()  # dict
     user = User(**data)
     # app_state['db'].insert_user(user) ...
     return web.json_response(user.__dict__)
