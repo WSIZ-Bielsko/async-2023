@@ -8,6 +8,7 @@ from model import User
 routes = web.RouteTableDef()
 
 app_state = dict()
+app_state['users'] = dict()  # userid -> user
 
 
 @routes.get('/')
@@ -37,8 +38,33 @@ async def upload_user(request):
     logger.info(f'POST /users hit')
     data = await request.json()  # dict
     user = User(**data)
+    logger.info(f'Creating user {user}')
     # app_state['db'].insert_user(user) ...
+
+    users_db = app_state['users']
+    if user.id in users_db:
+        logger.warning(f'Trying to overwrite existing user with id={user.id}')
+        return web.json_response({'result': 'Error: trying to overwrite user with same id', 'host': node()},
+                                 status=400)
+    users_db[user.id] = user
     return web.json_response(user.__dict__)
+
+
+@routes.get('/users/{id}')
+async def get_user_with_id(request):
+    logger.info(f'GET /users hit')
+    try:
+        user_id = request.match_info['id']
+    except RuntimeError:
+        return web.json_response({'result': f'User id provided', 'host': node()}, status=400)
+
+    logger.info(f'Getting user with id={user_id}')
+
+    users_db = app_state['users']
+    if user_id not in users_db:
+        return web.json_response({'result': f'No user id={user_id} exists', 'host': node()}, status=400)
+
+    return web.json_response({'result': users_db[user_id].__dict__, 'host': node()}, status=200)
 
 
 async def app_factory():
