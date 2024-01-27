@@ -7,7 +7,7 @@ from loguru import logger
 
 from model import User, FloatResult, RpsCounter
 
-URL = 'http://192.168.100.83:5000'  # insert url of your server
+URL = 'http://localhost:5000'  # insert url of your server
 
 
 async def add_numbers():
@@ -15,8 +15,12 @@ async def add_numbers():
     b = random()
     async with aiohttp.ClientSession() as session:
         async with session.get(URL + f'/add?a={a}&b={b}') as res:
-            f_res = FloatResult(**(await res.json()))
-            logger.info(f_res)
+            # odpowiednik http://localhost:5000/add?a=3.30&b=7.30
+            if res.status == 200:
+                f_res = FloatResult(**(await res.json()))
+                logger.info(f_res)
+            else:
+                logger.warning('Error: ' + str(res.text()))
 
 
 async def upload_user():
