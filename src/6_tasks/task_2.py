@@ -2,12 +2,12 @@ import unittest
 
 """
 Napisać funkcję (wpisać kod ↓↓), która podaje rozwiązanie następującego zadania:
-Mamy trzy liczby całkowite, podane w liście "data". Próbujemy stworzyć z tych liczb _kombinację_ 
-o największej sumie, przy czym _kombinacją_ jest tablica podobna do "data", z tym, że pojedyncze jej
+Mamy trzy liczby całkowite, podane w liście "app_state". Próbujemy stworzyć z tych liczb _kombinację_ 
+o największej sumie, przy czym _kombinacją_ jest tablica podobna do "app_state", z tym, że pojedyncze jej
 elementy mogą mieć zmieniony znak. 
 
 Przykaład:
-data = [1,-2,3]
+app_state = [1,-2,3]
 kombinacje:
 [1,-2,3]
 [1,-2,-3]

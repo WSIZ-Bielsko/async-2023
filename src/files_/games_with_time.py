@@ -16,13 +16,13 @@ async def save_data(data: bytes):
     chunk_size = 1 * 1024 ** 2
     n_chunks = len(data) // chunk_size
 
-    logger.info(f'data {mb} save start')
+    logger.info(f'app_state {mb} save start')
     with open('data.bin', 'wb') as f:
         for i in range(n_chunks):
             logger.info(f'saving chunk no {i}')
             f.write(data[i * chunk_size: (i + 1) * chunk_size])
             await sleep(0.001)
-    logger.info(f'data {mb} save complete')
+    logger.info(f'app_state {mb} save complete')
 
 
 async def save_data_aiofile(data: bytes):
@@ -30,14 +30,14 @@ async def save_data_aiofile(data: bytes):
     chunk_size = 50 * 1024 ** 2
     n_chunks = len(data) // chunk_size
 
-    logger.info(f'data {mb} save start')
+    logger.info(f'app_state {mb} save start')
 
     async with async_open('data.bin', 'wb') as f:
         for i in range(n_chunks):
             logger.info(f'saving chunk {i}')
             await f.write(data[i * chunk_size: (i + 1) * chunk_size])
 
-    logger.info(f'data {mb} save complete')
+    logger.info(f'app_state {mb} save complete')
 
 
 async def big_job(data: bytes):
@@ -45,7 +45,7 @@ async def big_job(data: bytes):
     # await sleep(0)
     # await sleep(0.5)
     # time.sleep(0.5)  # blocking!!
-    # await save_data(data)
+    # await save_data(app_state)
     await save_data_aiofile(data)
     logger.info('big_job complete')
 

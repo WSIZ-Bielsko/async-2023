@@ -117,7 +117,7 @@ async def main():
     # dla 100k, przy create_many_users; 4core cpu na db --> 1.44s; czyli 0.014 na 1k users
     # prawdopodobnie limitowane przez predkosc sieci
     # todo: test on db-local host (i.e. host and db are on same VM, or _very_ close)
-    # dla 100k, create_many_users, 4core, run at 10.10.1.200 (same host as db) --> 1.04s (0.01 / 1k users)
+    # dla 100k, create_many_users, 4core, run at 10.10.1.200 (same host as db) --> 1.04s (0.01 / 1k users; 330%CPU)
 
     print(f'size of users data: {len(str(users))}')
     import sys
