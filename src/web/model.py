@@ -1,10 +1,17 @@
 from dataclasses import dataclass
+from uuid import UUID
 
 
 @dataclass
 class User:
-    id: str
+    uid: UUID | None
     name: str
+    passwd: str
+
+    def serialized(self):
+        self.uid = str(self.uid)
+        self.passwd = ''
+        return self.__dict__
 
 
 @dataclass

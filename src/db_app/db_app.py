@@ -26,7 +26,8 @@ class DbService:
 
     async def initialize(self):
         try:
-            self.pool = await asyncpg.create_pool(self.database_url, min_size=50, max_size=50,
+            self.pool = await asyncpg.create_pool(self.database_url,
+                                                  min_size=50, max_size=50,
                                                   timeout=30, command_timeout=5)
             logger.info('connected!')
         except Exception as e:
@@ -43,9 +44,11 @@ class DbService:
         # if user.uid is N -- new user -- insert; else update user with given user.uid
         # logger.info(f'Creating user {user}')
         async with self.pool.acquire() as connection:
-            row = await connection.fetchrow('insert into pusers(name, email) VALUES ($1, $2) returning *',
+            row = await connection.fetchrow('insert into pusers(name, email) '
+                                            'VALUES ($1, $2) returning *',
                                             user.name, user.email)
-            # await connection.execute('insert into pusers(name, email) VALUES ($1, $2) returning *',
+            # await connection.execute('insert into pusers(name, email)
+            # VALUES ($1, $2) returning *',
             #                                 user.name, user.email)
         # logger.info(f'User {user} created')
         return User(**dict(row))

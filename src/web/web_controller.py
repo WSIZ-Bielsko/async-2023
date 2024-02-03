@@ -1,14 +1,21 @@
+import os
 from platform import node
+from uuid import UUID
 
 from aiohttp import web
 from loguru import logger
 
 from model import User
+from db_service import DbService, DEFAULT_DATABASE_URL
 
 routes = web.RouteTableDef()
 
 app_state = dict()
 app_state['users'] = dict()  # userid -> user
+
+
+def db() -> DbService:
+    return app_state['db']
 
 
 @routes.get('/')
@@ -39,32 +46,28 @@ async def upload_user(request):
     data = await request.json()  # dict
     user = User(**data)
     logger.info(f'Creating user {user}')
-    # app_state['db'].insert_user(user) ...
 
-    users_db = app_state['users']
-    if user.id in users_db:
-        logger.warning(f'Trying to overwrite existing user with id={user.id}')
-        return web.json_response({'result': 'Error: trying to overwrite user with same id', 'host': node()},
-                                 status=400)
-    users_db[user.id] = user
-    return web.json_response(user.__dict__)
+    user = await db().create(user)
+    logger.info(f'created {user}')
+
+    return web.json_response(user.serialized())
 
 
-@routes.get('/users/{id}')
+@routes.get('/users/{uid}')
 async def get_user_with_id(request):
-    logger.info(f'GET /users hit')
+    logger.info('GET /users/{uid} hit')
     try:
-        user_id = request.match_info['id']
+        user_id = UUID(request.match_info['uid'])
     except RuntimeError:
-        return web.json_response({'result': f'User id provided', 'host': node()}, status=400)
+        return web.json_response({'result': f'No user id provided', 'host': node()}, status=400)
 
     logger.info(f'Getting user with id={user_id}')
 
-    users_db = app_state['users']
-    if user_id not in users_db:
-        return web.json_response({'result': f'No user id={user_id} exists', 'host': node()}, status=400)
+    user = await db().get_user_by_uid(user_id)
 
-    return web.json_response({'result': users_db[user_id].__dict__, 'host': node()}, status=200)
+    if not user:
+        return web.json_response({'result': f'No user id={user_id} exists', 'host': node()}, status=400)
+    return web.json_response(user.serialized(), status=200)
 
 
 async def app_factory():
@@ -74,7 +77,9 @@ async def app_factory():
     """
     app = web.Application()
     app.add_routes(routes)
-    # app_state['db'] = DbService(...)
+    DATABASE_URL = os.getenv('DB_URL', DEFAULT_DATABASE_URL)
+    app_state['db'] = DbService(DATABASE_URL)
+    await db().initialize()
     return app
 
 

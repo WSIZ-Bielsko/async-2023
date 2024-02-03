@@ -24,17 +24,24 @@ async def add_numbers():
 
 
 async def upload_user() -> User:
-    u = User('xx1', 'Romek')
+    u = User(None, 'Romek', 'secret')
     async with aiohttp.ClientSession() as session:
         async with session.post(URL + '/users', json=u.__dict__) as res:
-            logger.info('user=' + str(await res.json()))
-            return u
+            user = await res.json()
+            logger.info(f'created {user}')
+            return User(**user)
 
 
 async def get_user(user_id: str):
+    logger.info(f'pulling user with id={user_id}')
     async with aiohttp.ClientSession() as session:
         async with session.get(URL + f'/users/{user_id}') as res:
-            logger.info('got user=' + str(await res.json()))
+            if res.status == 200:
+                u = User(**(await res.json()))
+                logger.info(f'user from remote system: {u}')
+                return u
+            else:
+                logger.warning('No user found')
 
 
 # PERFORMANCE TESTS
@@ -70,6 +77,8 @@ async def performance_test(n_workers: int = 1):
 
 async def main():
     u = await upload_user()
+    z = await get_user(u.uid)
+    logger.warning(z)
     # await get_user(u.id)
     # await add_numbers()
 
