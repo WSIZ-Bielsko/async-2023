@@ -5,3 +5,5 @@ aiofile~=3.8.8
 Faker~=22.2.0
 argon2-cffi~=23.1.0
 python-dotenv~=1.0.1
+
+redis~=5.0.1

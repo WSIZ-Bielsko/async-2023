@@ -10,11 +10,15 @@ from db_service import DbService, DEFAULT_DATABASE_URL
 
 routes = web.RouteTableDef()
 
-app_state = dict()
+app_state: dict[str, any] = dict()
 app_state['users'] = dict()  # userid -> user
 
 
 def db() -> DbService:
+    """
+    Alias -- helps with syntax completion
+    :return: DbService used by the application
+    """
     return app_state['db']
 
 
