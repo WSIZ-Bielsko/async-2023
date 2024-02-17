@@ -83,9 +83,24 @@ def containers():
     print(type(pp_s))
     zz = User.parse_raw(pp_s)
     logger.warning(zz)
-    logger.warning(zz == p_peru)    # comparing by values
+    logger.warning(zz == p_peru)  # comparing by values
     logger.warning(id(zz))
     logger.warning(id(p_peru))
 
+
+def play_with_pydantic_and_json():
+    # klasa danych używająca pydantica
+    u = User(uid=uuid4(), name='Orban', birthdate=date(1960, 2, 12))
+    print(u)
+    # prosta zamiana na json-y (stringi), również dla skomplikowanych typów
+    str_u = u.json()
+    print(str_u)
+    # zamiana json-a na instancję klasy User
+    u2 = User.parse_raw(str_u)
+    print(u2)
+    print(u == u2)
+
+
 if __name__ == '__main__':
-    containers()
+    # containers()
+    play_with_pydantic_and_json()
