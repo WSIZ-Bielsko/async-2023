@@ -95,6 +95,8 @@ def play_with_pydantic_and_json():
     # prosta zamiana na json-y (stringi), również dla skomplikowanych typów
     str_u = u.json()
     print(str_u)
+    logger.warning(f'size of user: {len(str_u)}')
+
     # zamiana json-a na instancję klasy User
     u2 = User.parse_raw(str_u)
     print(u2)
@@ -103,4 +105,9 @@ def play_with_pydantic_and_json():
 
 if __name__ == '__main__':
     # containers()
-    play_with_pydantic_and_json()
+    # play_with_pydantic_and_json()
+
+    # u = User(uuid4(), 'Gargamel', date(1980, 1, 1, ))
+
+    u = User(uid=uuid4(), name='Gg', birthdate=12)
+    # print("this" + u)
